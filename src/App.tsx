@@ -139,6 +139,10 @@ const Checkbox = ({
 // --- Main App Component ---
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+
   const [activeTab, setActiveTab] = useState<Tab>('enhance');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -398,6 +402,54 @@ export default function App() {
       </div>
     );
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans selection:bg-purple-200">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 w-full max-w-sm">
+          <div className="flex justify-center mb-6">
+            <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-purple-500" />
+            </div>
+          </div>
+          <h2 className="text-xl font-bold text-center text-slate-800 mb-6">
+            Thái Satoh <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">AI Enhancer</span>
+          </h2>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            if (password === 'thai1991') {
+              setIsAuthenticated(true);
+            } else {
+              setLoginError('Mật khẩu không đúng');
+            }
+          }}>
+            <div className="mb-4">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setLoginError('');
+                }}
+                placeholder="Nhập mật khẩu..."
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm"
+                autoComplete="new-password"
+                autoCorrect="off"
+                spellCheck="false"
+              />
+              {loginError && <p className="text-red-500 text-xs mt-2 ml-1">{loginError}</p>}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:shadow-purple-200 transition-all text-sm"
+            >
+              Đăng Nhập
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-purple-200">
